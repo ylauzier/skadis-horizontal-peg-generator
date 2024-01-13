@@ -161,3 +161,9 @@ module generateHorizontalPegsFromGraph(graph) {
         graph = graph
     );
 }
+
+/** Returns the peg width in millimeters. */
+function PegWidth() = 17;
+
+/** Returns the peg height in millimeters. */
+function PegHeight() = 5;

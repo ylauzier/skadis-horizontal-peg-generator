@@ -32,16 +32,11 @@ module generateHorizonalPegs(
     rows = DefaultRows, 
     verticalDirection = 1, 
     horizontalDirection = 1, 
-    decaleDirection = 1, 
-    skipNColumns = 1, 
-    skipNRows = 1,
+    decaleDirection = 1,
     graph = false,
 ) {
     actualVerticalDistance = VerticalDistanceBetweenPeg * verticalDirection;
-    actualHoritzontalDistance = HorizontalDistanceBetweenPeg * horizontalDirection;
-    neverSkipColumns = skipNColumns == 1;
-    neverSkipRows = skipNRows == 1;
-    
+    actualHoritzontalDistance = HorizontalDistanceBetweenPeg * horizontalDirection;    
 
     for (rowIndex = [0:rows - 1]) {
         graphRow = graph ? graph[rowIndex] : false;
@@ -49,22 +44,20 @@ module generateHorizonalPegs(
         middleRow = rowIndex % 2 != 0;
         distanceToAddAfterOrRemove = actualVerticalDistance * decaleDirection;
 
-        if (neverSkipRows || rowNumber % skipNRows != 0) {
-            translate([middleRow? distanceToAddAfterOrRemove : 0, 0, actualVerticalDistance * rowIndex]) {
-                amountColumnsForRow = middleRow && !graphRow ? columns - 1 : columns;
+        translate([middleRow? distanceToAddAfterOrRemove : 0, 0, actualVerticalDistance * rowIndex]) {
+            amountColumnsForRow = middleRow && !graphRow ? columns - 1 : columns;
 
-                for (columnIndex = [0:amountColumnsForRow - 1]) {
-                    columnNumber = columnIndex + 1;
-                    graphRowLength = graphRow ? len(graphRow) : 0;
-                    graphColumn = graphRow && graphRowLength > 0 ? graphRow[columnIndex] : graphRow ? false : true;
+            for (columnIndex = [0:amountColumnsForRow - 1]) {
+                columnNumber = columnIndex + 1;
+                graphRowLength = graphRow ? len(graphRow) : 0;
+                graphColumn = graphRow && graphRowLength > 0 ? graphRow[columnIndex] : graphRow ? false : true;
 
-                    if ((neverSkipColumns || columnNumber % skipNColumns != 0) && graphColumn) {
-                        translate([columnIndex * actualHoritzontalDistance, 0, 0]) {
-                            generateHorizonalPegAtOrigin();
-                        }
+                if (graphColumn) {
+                    translate([columnIndex * actualHoritzontalDistance, 0, 0]) {
+                        generateHorizonalPegAtOrigin();
                     }
                 }
-            } 
+            }
         } 
     }
 }
@@ -72,9 +65,7 @@ module generateHorizonalPegs(
 // Generates horizontal pegs from the top to the right of the origin.
 module generateHorizontalPegsFromTopToRight(
     columns = DefaultColumns, 
-    rows = DefaultRows, 
-    skipNColumns = 1,
-    skipNRows = 1,
+    rows = DefaultRows,
     graph
 ) {
     generateHorizonalPegs(
@@ -82,9 +73,7 @@ module generateHorizontalPegsFromTopToRight(
         rows = rows, 
         verticalDirection = -1, 
         horizontalDirection = 1, 
-        decaleDirection = -1, 
-        skipNColumns = skipNColumns, 
-        skipNRows = skipNRows,
+        decaleDirection = -1,
         graph = graph
     );
 }
@@ -92,54 +81,42 @@ module generateHorizontalPegsFromTopToRight(
 // Generates horizontal pegs from the top to the left of the origin.
 module createHorizontalPegsFromTopToLeft(
     columns = DefaultColumns, 
-    rows = DefaultRows, 
-    skipNColumns = 1,
-    skipNRows = 1
+    rows = DefaultRows
 ) {
     generateHorizonalPegs(
         columns = columns, 
         rows = rows, 
         verticalDirection = -1, 
         horizontalDirection = -1, 
-        decaleDirection = 1, 
-        skipNColumns = skipNColumns, 
-        skipNRows = skipNRows
+        decaleDirection = 1
     );
 }
 
 // Generates horizontal pegs from the bottom to the right of the origin.
 module createHorizontalPegsFromBottomToRight(
     columns = DefaultColumns, 
-    rows = DefaultRows, 
-    skipNColumns = 1,
-    skipNRows = 1
+    rows = DefaultRows
 ) {
     generateHorizonalPegs(
         columns = columns, 
         rows = rows, 
         verticalDirection = 1, 
         horizontalDirection = 1, 
-        decaleDirection = 1, 
-        skipNColumns = skipNColumns, 
-        skipNRows = skipNRows
+        decaleDirection = 1
     );
 }
 
 // Generates horizontal pegs from the bottom to the left of the origin.
 module generateHorizontalPegsFromBottomToLeft(
     columns = DefaultColumns, 
-    rows = DefaultRows, 
-    skipNColumns = 1,
-    skipNRows = 1
+    rows = DefaultRows
 ) {
     generateHorizonalPegs(
         columns = columns, 
         rows = rows, 
         verticalDirection = 1, 
         horizontalDirection = -1, 
-        decaleDirection = -1, 
-        skipNColumns = skipNColumns, 
-        skipNRows = skipNRows
+        decaleDirection = -1
     );
 }
 
